@@ -19,14 +19,21 @@ jobs:
         shell: pwsh
         run: |
           mkdir sqlite
-          tar -xzf sqlite.tar.gz -C sqlite
+          tar -xzf sqlite.tar.gz -C sqlite --strip-components=1
       - name: Run Configure
         shell: bash
         run: |
-          cd sqlite/sqlite
+          cd sqlite/
           ./configure
+      - name: Install MSYS2 and Required Tools
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >
+            mingw-w64-x86_64-gcc
+            make
       - name: Run Make
         shell: bash
         run: |
-          cd sqlite/sqlite
+          cd sqlite/
           make sqlite3.c
