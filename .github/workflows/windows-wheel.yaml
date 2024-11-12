@@ -28,3 +28,10 @@ jobs:
           python -m pip install setuptools wheel
       - name: Build pysqlite3
         run: python setup.py build_static build
+      - name: Create pysqlite3 wheel
+        run: python -m pip wheel . -w wheelhouse/
+      - name: Upload Wheel Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pysqlite3-wheel
+          path: wheelhouse/*.whl
