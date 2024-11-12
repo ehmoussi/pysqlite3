@@ -14,26 +14,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Download SQLite
         shell: pwsh
-        run: Invoke-WebRequest -Uri "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release" -OutFile "sqlite.tar.gz"
+        run: Invoke-WebRequest -Uri "https://www.sqlite.org/2024/sqlite-amalgamation-3470000.zip" -OutFile "sqlite-amalgamation.zip"
       - name: Extract SQLite
         shell: pwsh
         run: |
           mkdir sqlite
-          tar -xzf sqlite.tar.gz -C sqlite --strip-components=1
-      - name: Run Configure
-        shell: bash
+          tar -xzf sqlite-amalgamation.zip -C . --strip-components=1
+      - name: Install Python Build Dependencies
         run: |
-          cd sqlite/
-          ./configure
-      - name: Install MSYS2 and Required Tools
-        uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: >
-            mingw-w64-x86_64-gcc
-            make
-      - name: Run Make
-        shell: bash
-        run: |
-          cd sqlite/
-          make sqlite3.c
+          python -m pip install --upgrade pip
+          python -m pip install setuptools wheel
+      - name: Build pysqlite3
+        run: python setup.py build_static build
