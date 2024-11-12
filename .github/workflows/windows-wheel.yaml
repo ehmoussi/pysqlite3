@@ -23,10 +23,10 @@ jobs:
       - name: Run Configure
         shell: bash
         run: |
-          cd sqlite
+          cd sqlite/sqlite
           ./configure
       - name: Run Make
         shell: bash
         run: |
-          cd sqlite
+          cd sqlite/sqlite
           make sqlite3.c
