@@ -35,3 +35,18 @@ jobs:
         with:
           name: pysqlite3-wheel
           path: wheelhouse/*.whl
+      - name: Upload Wheel Artifact as Release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "pysqlite3 release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+      - name: Upload Wheel to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
+          asset_path: wheelhouse/*.whl
+          asset_name: ""
+          asset_content_type: application/octet-stream
