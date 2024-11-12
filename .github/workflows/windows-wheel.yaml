@@ -1,11 +1,11 @@
-name: Download, Compile and Build a Wheel of pysqlite3 for Windows
+name: Download, Compile and Build a Wheel of pysqlite3 for python 3.6 Windows
 on:
   push:
       branches:
-          - test_wheel
+          - master
   pull_request:
       branches:
-      - test_wheel
+      - master
 jobs:
   sqlite_wheel:
     runs-on: windows-latest
