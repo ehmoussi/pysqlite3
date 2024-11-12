@@ -31,18 +31,20 @@ jobs:
       - name: Build pysqlite3
         run: python setup.py build_static build
       - name: Create pysqlite3 wheel
-        run: python -m pip wheel . -w wheelhouse/
+        run: |
+          mkdir wheelhouse
+          python -m pip wheel . -w wheelhouse/
       - name: Upload Wheel Artifact
         uses: actions/upload-artifact@v3
         with:
           name: pysqlite3-wheel
           path: wheelhouse/*.whl
-      - name: Upload Wheel Artifact as Release
+      - name: Create Release
         uses: actions/create-release@v1
         id: create_release
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: "pysqlite3 release ${{ github.ref_name }}"
+          release_name: "pysqlite3 ${{ github.ref_name }}"
           draft: false
           prerelease: false
       - name: Upload Wheel to Release
