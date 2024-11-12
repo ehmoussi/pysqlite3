@@ -1,0 +1,41 @@
+name: Download, Compile and Build a Wheel of pysqlite3 for python 3.6 Windows
+on:
+  push:
+      branches:
+          - master
+  pull_request:
+      branches:
+      - master
+jobs:
+  sqlite_wheel:
+    runs-on: windows-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download SQLite
+        shell: pwsh
+        run: Invoke-WebRequest -Uri "https://www.sqlite.org/2024/sqlite-amalgamation-3470000.zip" -OutFile "sqlite-amalgamation.zip"
+      - name: Extract SQLite
+        shell: pwsh
+        run: tar -xzf sqlite-amalgamation.zip -C . --strip-components=1
+      - name: Install Python Build Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install setuptools wheel
+      - name: Build pysqlite3
+        run: python setup.py build_static build
+      - name: Create pysqlite3 wheel
+        run: |
+          mkdir wheelhouse
+          python -m pip wheel . -w wheelhouse/
+      - name: Upload Wheel Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pysqlite3-wheel
+          path: wheelhouse/*.whl
