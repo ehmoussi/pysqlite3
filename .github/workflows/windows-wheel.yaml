@@ -17,8 +17,14 @@ jobs:
         run: Invoke-WebRequest -Uri "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release" -OutFile "sqlite.tar.gz"
       - name: Extract SQLite
         shell: pwsh
+        run: tar -xzf sqlite.tar.gz -C sqlite
+      - name: Run Configure
+        shell: bash
         run: |
-            # Create a temporary directory for extraction
-            New-Item -ItemType Directory -Path extracted -Force
-            # Extract the tar.gz using tar in PowerShell
-            tar -xzf sqlite.tar.gz -C extracted
+          cd sqlite
+          ./configure
+      - name: Run Make
+        shell: bash
+        run: |
+          cd sqlite
+          make sqlite3.c
