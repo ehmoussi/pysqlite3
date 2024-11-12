@@ -1,0 +1,24 @@
+name: Download and Extract SQLite
+on:
+  push:
+      branches:
+          - test_wheel
+  pull_request:
+      branches:
+      - test_wheel
+jobs:
+  download_sqlite:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download SQLite
+        shell: pwsh
+        run: Invoke-WebRequest -Uri "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release" -OutFile "sqlite.tar.gz"
+      - name: Extract SQLite
+        shell: pwsh
+        run: |
+            # Create a temporary directory for extraction
+            New-Item -ItemType Directory -Path extracted -Force
+            # Extract the tar.gz using tar in PowerShell
+            tar -xzf sqlite.tar.gz -C extracted
