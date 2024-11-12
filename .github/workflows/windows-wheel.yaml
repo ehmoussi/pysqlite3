@@ -1,4 +1,4 @@
-name: Download and Extract SQLite
+name: Download, Compile and Build a Wheel of pysqlite3 for Windows
 on:
   push:
       branches:
@@ -7,7 +7,7 @@ on:
       branches:
       - test_wheel
 jobs:
-  download_sqlite:
+  sqlite_wheel:
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -17,7 +17,9 @@ jobs:
         run: Invoke-WebRequest -Uri "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release" -OutFile "sqlite.tar.gz"
       - name: Extract SQLite
         shell: pwsh
-        run: tar -xzf sqlite.tar.gz -C sqlite
+        run: |
+          mkdir sqlite
+          tar -xzf sqlite.tar.gz -C sqlite
       - name: Run Configure
         shell: bash
         run: |
