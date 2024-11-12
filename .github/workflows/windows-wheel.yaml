@@ -10,6 +10,10 @@ jobs:
   sqlite_wheel:
     runs-on: windows-latest
     steps:
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Download SQLite
@@ -17,9 +21,7 @@ jobs:
         run: Invoke-WebRequest -Uri "https://www.sqlite.org/2024/sqlite-amalgamation-3470000.zip" -OutFile "sqlite-amalgamation.zip"
       - name: Extract SQLite
         shell: pwsh
-        run: |
-          mkdir sqlite
-          tar -xzf sqlite-amalgamation.zip -C . --strip-components=1
+        run: tar -xzf sqlite-amalgamation.zip -C . --strip-components=1
       - name: Install Python Build Dependencies
         run: |
           python -m pip install --upgrade pip
